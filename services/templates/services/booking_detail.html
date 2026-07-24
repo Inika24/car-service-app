@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Booking #{{ booking.id }} Details - CarService System{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center py-3">
+    <div class="col-lg-8">
+        <div class="form-card">
+            <!-- Header Ticket Banner -->
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center pb-4 mb-4 border-bottom gap-3">
+                <div>
+                    <span class="badge bg-light text-dark font-monospace border mb-2">BOOKING TICKET #{{ booking.id }}</span>
+                    <h3 class="fw-bold mb-1">{{ booking.service.name }}</h3>
+                    <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i> Booked on {{ booking.created_at }}</p>
+                </div>
+                <div>
+                    {% if booking.status == "pending" %}
+                        <span class="badge-status badge-pending fs-6"><i class="bi bi-hourglass-split"></i> Pending</span>
+                    {% elif booking.status == "confirmed" %}
+                        <span class="badge-status badge-confirmed fs-6"><i class="bi bi-check-circle"></i> Confirmed</span>
+                    {% elif booking.status == "in_progress" %}
+                        <span class="badge-status badge-in-progress fs-6"><i class="bi bi-gear-wide-connected"></i> In Progress</span>
+                    {% elif booking.status == "completed" %}
+                        <span class="badge-status badge-completed fs-6"><i class="bi bi-patch-check-fill"></i> Completed</span>
+                    {% elif booking.status == "cancelled" %}
+                        <span class="badge-status badge-cancelled fs-6"><i class="bi bi-x-circle"></i> Cancelled</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Details Breakdown -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border h-100">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-primary fw-semibold">
+                            <i class="bi bi-car-front-fill fs-5"></i> Vehicle Information
+                        </div>
+                        <div class="fw-bold text-dark fs-5">{{ booking.vehicle.brand }} {{ booking.vehicle.model }}</div>
+                        <div class="small text-muted mb-2">Registration Tag:</div>
+                        <span class="badge bg-dark font-monospace text-warning px-3 py-1 border">{{ booking.vehicle.registration_number }}</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border h-100">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-primary fw-semibold">
+                            <i class="bi bi-calendar-event-fill fs-5"></i> Appointment Time
+                        </div>
+                        <div class="fw-bold text-dark fs-6 mb-1"><i class="bi bi-calendar3 me-1"></i> {{ booking.booking_date }}</div>
+                        <div class="fw-bold text-dark fs-6"><i class="bi bi-clock me-1"></i> {{ booking.booking_time }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Cost Breakdown Table -->
+            <h5 class="fw-bold mb-3"><i class="bi bi-receipt me-2 text-primary"></i>Service & Pricing Breakdown</h5>
+            <div class="table-responsive rounded-3 border mb-4">
+                <table class="table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item Description</th>
+                            <th>Category</th>
+                            <th>Duration</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">{{ booking.service.name }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ booking.service.category.name }}</span></td>
+                            <td>{{ booking.service.estimated_duration }} Minutes</td>
+                            <td class="text-end fw-bold text-primary">₹ {{ booking.service.price }}</td>
+                        </tr>
+                        <tr class="table-light border-top">
+                            <td colspan="3" class="fw-bold text-end">Total Amount Payable:</td>
+                            <td class="text-end fw-extrabold text-primary fs-5">₹ {{ booking.service.price }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'booking_list' %}" class="btn btn-secondary-custom">
+                    <i class="bi bi-arrow-left me-1"></i> Back to My Bookings
+                </a>
+                {% if booking.status == "pending" %}
+                    <a href="{% url 'cancel_booking' booking.pk %}" class="btn btn-outline-danger rounded-pill px-4" onclick="return confirm('Cancel this appointment?');">
+                        Cancel Booking
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

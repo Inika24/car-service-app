@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Book Vehicle Service - CarService System{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center py-4">
+    <div class="col-lg-8 col-md-10">
+        <div class="form-card">
+            <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                <div class="stat-icon" style="width: 52px; height: 52px; font-size: 1.5rem; background: #eff6ff; color: #2563eb;">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">Schedule Service Appointment</h3>
+                    <p class="text-muted small mb-0">Select your registered vehicle, desired service, and preferred date & time.</p>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger rounded-3 small py-2">
+                        {% for error in form.non_field_errors %}
+                            <div><i class="bi bi-exclamation-circle me-1"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="row g-3">
+                    {% for field in form %}
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label" for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text small text-muted">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1"><i class="bi bi-x-circle me-1"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="p-3 bg-light rounded-3 border mt-4 mb-4 d-flex align-items-center gap-3">
+                    <i class="bi bi-info-circle-fill text-primary fs-4"></i>
+                    <div class="small text-muted">
+                        <strong>Instant Confirmation:</strong> Our certified mechanics will review your appointment request and update your status in real-time on your dashboard.
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-custom btn-lg flex-grow-1">
+                        <i class="bi bi-check2-circle me-1"></i> Confirm & Book Appointment
+                    </button>
+                    <a href="{% url 'booking_list' %}" class="btn btn-secondary-custom">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

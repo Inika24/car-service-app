@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Service History Logs - CarService System{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-clock-history text-primary me-2"></i>Completed Service Records</h2>
+        <p class="text-muted mb-0">Archived history of all past successfully completed vehicle maintenance services.</p>
+    </div>
+    <a href="{% url 'booking_list' %}" class="btn btn-secondary-custom">
+        <i class="bi bi-calendar-check me-1"></i> Active Appointments
+    </a>
+</div>
+
+{% if bookings %}
+<div class="custom-table-container">
+    <table class="table custom-table align-middle">
+        <thead>
+            <tr>
+                <th>Vehicle Specs</th>
+                <th>Completed Service</th>
+                <th>Service Date & Time</th>
+                <th>Status</th>
+                <th class="text-end">Record Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>
+                    <div class="fw-bold text-dark">{{ booking.vehicle.brand }} {{ booking.vehicle.model }}</div>
+                    <span class="badge bg-light text-dark font-monospace border small">{{ booking.vehicle.registration_number }}</span>
+                </td>
+                <td>
+                    <div class="fw-semibold text-dark">{{ booking.service.name }}</div>
+                    <div class="small text-muted">₹{{ booking.service.price }}</div>
+                </td>
+                <td>
+                    <div class="small fw-semibold text-dark"><i class="bi bi-calendar-check me-1 text-success"></i> {{ booking.booking_date }}</div>
+                    <div class="small text-muted"><i class="bi bi-clock me-1 text-success"></i> {{ booking.booking_time }}</div>
+                </td>
+                <td>
+                    <span class="badge-status badge-completed"><i class="bi bi-patch-check-fill"></i> Completed</span>
+                </td>
+                <td class="text-end">
+                    <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                        <i class="bi bi-receipt me-1"></i> Receipt
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="custom-card text-center py-5">
+    <i class="bi bi-journal-check display-1 text-muted opacity-50 mb-3 d-block"></i>
+    <h4 class="fw-bold text-muted mb-2">No Completed Service History Yet</h4>
+    <p class="small text-muted mb-4">Completed maintenance appointments will automatically appear here for your digital records.</p>
+    <a href="{% url 'book_service' %}" class="btn btn-primary-custom">
+        <i class="bi bi-plus-circle me-1"></i> Book First Maintenance
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}

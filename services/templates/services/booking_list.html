@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments & Bookings - CarService System{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-calendar-check text-primary me-2"></i>Service Appointments</h2>
+        <p class="text-muted mb-0">Track and manage your upcoming and past vehicle service bookings.</p>
+    </div>
+    <div>
+        <a href="{% url 'book_service' %}" class="btn btn-primary-custom">
+            <i class="bi bi-plus-circle me-1"></i> Book New Service
+        </a>
+    </div>
+</div>
+
+<!-- Search & Filter Card -->
+<div class="form-card mb-4 p-3">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control border-start-0"
+                    placeholder="Search by registration number (e.g. TN37...)"
+                    value="{{ request.GET.search }}"
+                >
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <select name="status" class="form-select">
+                <option value="">Filter by All Statuses</option>
+                <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>🟡 Pending Approval</option>
+                <option value="confirmed" {% if request.GET.status == "confirmed" %}selected{% endif %}>🔵 Confirmed</option>
+                <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>🟣 In Progress</option>
+                <option value="completed" {% if request.GET.status == "completed" %}selected{% endif %}>🟢 Completed</option>
+                <option value="cancelled" {% if request.GET.status == "cancelled" %}selected{% endif %}>🔴 Cancelled</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button class="btn btn-primary-custom w-100 py-2">
+                <i class="bi bi-funnel me-1"></i> Apply Filters
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Bookings Table -->
+{% if page_obj %}
+<div class="custom-table-container">
+    <table class="table custom-table align-middle">
+        <thead>
+            <tr>
+                <th>Vehicle Specs</th>
+                <th>Service Name</th>
+                <th>Appointment Date & Time</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in page_obj %}
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="stat-icon" style="width: 38px; height: 38px; font-size: 1.1rem; background: #eff6ff; color: #2563eb;">
+                            <i class="bi bi-car-front-fill"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark">{{ booking.vehicle.brand }} {{ booking.vehicle.model }}</div>
+                            <span class="badge bg-light text-dark font-monospace small border">{{ booking.vehicle.registration_number }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="fw-semibold text-dark">{{ booking.service.name }}</div>
+                    <div class="small text-muted">₹{{ booking.service.price }} • {{ booking.service.estimated_duration }} Mins</div>
+                </td>
+                <td>
+                    <div class="small fw-semibold text-dark"><i class="bi bi-calendar3 me-1 text-primary"></i> {{ booking.booking_date }}</div>
+                    <div class="small text-muted"><i class="bi bi-clock me-1 text-primary"></i> {{ booking.booking_time }}</div>
+                </td>
+                <td>
+                    {% if booking.status == "pending" %}
+                        <span class="badge-status badge-pending"><i class="bi bi-hourglass-split"></i> Pending</span>
+                    {% elif booking.status == "confirmed" %}
+                        <span class="badge-status badge-confirmed"><i class="bi bi-check-circle"></i> Confirmed</span>
+                    {% elif booking.status == "in_progress" %}
+                        <span class="badge-status badge-in-progress"><i class="bi bi-gear-wide-connected"></i> In Progress</span>
+                    {% elif booking.status == "completed" %}
+                        <span class="badge-status badge-completed"><i class="bi bi-patch-check-fill"></i> Completed</span>
+                    {% elif booking.status == "cancelled" %}
+                        <span class="badge-status badge-cancelled"><i class="bi bi-x-circle"></i> Cancelled</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                        <i class="bi bi-eye me-1"></i> View
+                    </a>
+                    {% if booking.status == "pending" %}
+                        <a href="{% url 'cancel_booking' booking.pk %}" class="btn btn-sm btn-outline-danger rounded-pill px-3 ms-1" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                            Cancel
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link rounded-start-pill" href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}">
+                    <i class="bi bi-chevron-left me-1"></i> Previous
+                </a>
+            </li>
+        {% endif %}
+
+        {% for page in page_obj.paginator.page_range %}
+            <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+                <a class="page-link" href="?page={{ page }}&search={{ request.GET.search }}&status={{ request.GET.status }}">
+                    {{ page }}
+                </a>
+            </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link rounded-end-pill" href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}">
+                    Next <i class="bi bi-chevron-right ms-1"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% else %}
+<div class="custom-card text-center py-5">
+    <i class="bi bi-calendar-x display-1 text-muted opacity-50 mb-3 d-block"></i>
+    <h4 class="fw-bold text-muted mb-2">No Service Appointments Found</h4>
+    <p class="small text-muted mb-4">No bookings match your current search criteria. Try resetting filters or schedule a new service.</p>
+    <a href="{% url 'book_service' %}" class="btn btn-primary-custom">
+        <i class="bi bi-plus-circle me-1"></i> Schedule a New Service
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}

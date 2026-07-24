@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Vehicle - CarService System{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center py-4">
+    <div class="col-md-7 col-lg-6">
+        <div class="form-card">
+            <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                <div class="stat-icon" style="width: 48px; height: 48px; font-size: 1.4rem; background: #eff6ff; color: #2563eb;">
+                    <i class="bi bi-car-front-fill"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">Add New Vehicle</h4>
+                    <p class="text-muted small mb-0">Register a new car to your account garage.</p>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger rounded-3 small py-2">
+                        {% for error in form.non_field_errors %}
+                            <div><i class="bi bi-exclamation-circle me-1"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text small text-muted">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="text-danger small mt-1"><i class="bi bi-x-circle me-1"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary-custom flex-grow-1">
+                        <i class="bi bi-plus-circle me-1"></i> Save Vehicle
+                    </button>
+                    <a href="{% url 'vehicle_list' %}" class="btn btn-secondary-custom">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

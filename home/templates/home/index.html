@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Car Service Booking System - Premium Vehicle Maintenance{% endblock %}
+
+{% block content %}
+
+<!-- Hero Banner -->
+<div class="hero-card mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <div class="badge-tag">
+                <i class="bi bi-shield-check"></i> Certified Auto Care Platform
+            </div>
+            <h1 class="hero-title">
+                Precision Care for <br>Your Vehicle
+            </h1>
+            <p class="hero-subtitle">
+                Book top-rated car servicing, maintenance, and repairs online with ease. Schedule instant appointments, track real-time status updates, and manage your vehicle history seamlessly.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'book_service' %}" class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-calendar-plus me-1"></i> Book a Service Now
+                    </a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary-custom btn-lg">
+                        <i class="bi bi-speedometer2 me-1"></i> My Dashboard
+                    </a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-rocket-takeoff me-1"></i> Get Started Free
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary-custom btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Account
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-4 d-none d-lg-block text-end">
+            <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10 backdrop-blur">
+                <i class="bi bi-shield-lock-fill text-info display-1 mb-3"></i>
+                <h4 class="text-white mb-2">100% Guaranteed</h4>
+                <p class="text-secondary small mb-0">Original spare parts, transparent pricing, and certified mechanics on every job.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Counter Grid -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3 col-6">
+        <div class="stat-card" style="--stat-color: #2563eb; --stat-bg: #eff6ff;">
+            <div class="stat-icon"><i class="bi bi-car-front-fill"></i></div>
+            <div>
+                <div class="stat-value">5,200+</div>
+                <div class="stat-label">Cars Serviced</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+        <div class="stat-card" style="--stat-color: #10b981; --stat-bg: #ecfdf5;">
+            <div class="stat-icon"><i class="bi bi-star-fill"></i></div>
+            <div>
+                <div class="stat-value">4.9/5</div>
+                <div class="stat-label">User Rating</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+        <div class="stat-card" style="--stat-color: #8b5cf6; --stat-bg: #f5f3ff;">
+            <div class="stat-icon"><i class="bi bi-wrench-adjustable"></i></div>
+            <div>
+                <div class="stat-value">45+</div>
+                <div class="stat-label">Expert Techs</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+        <div class="stat-card" style="--stat-color: #06b6d4; --stat-bg: #ecfeff;">
+            <div class="stat-icon"><i class="bi bi-clock-history"></i></div>
+            <div>
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Online Booking</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Core Services Showcase -->
+<div class="mb-5">
+    <div class="text-center max-w-2xl mx-auto mb-4">
+        <span class="text-primary fw-semibold text-uppercase tracking-wider small">Our Offerings</span>
+        <h2 class="fw-bold mt-1">Popular Vehicle Services</h2>
+        <p class="text-muted">Choose from comprehensive service packages designed to keep your vehicle performing at its peak.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="custom-card">
+                <div class="stat-icon mb-3" style="background: #eff6ff; color: #2563eb;"><i class="bi bi-droplet-half"></i></div>
+                <h4 class="fw-bold mb-2">Engine Oil & Filter</h4>
+                <p class="text-muted small mb-3">Premium synthetic engine oil replacement, oil filter change, and full engine fluid top-up check.</p>
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                    <span class="fw-bold text-primary">₹2,500</span>
+                    <span class="badge bg-light text-dark fw-semibold"><i class="bi bi-clock me-1"></i> 60 Mins</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="custom-card">
+                <div class="stat-icon mb-3" style="background: #fee2e2; color: #ef4444;"><i class="bi bi-disc"></i></div>
+                <h4 class="fw-bold mb-2">Brake System Overhaul</h4>
+                <p class="text-muted small mb-3">Complete brake pad inspection, rotor resurfacing, brake fluid flush, and pressure calibration.</p>
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                    <span class="fw-bold text-primary">₹3,500</span>
+                    <span class="badge bg-light text-dark fw-semibold"><i class="bi bi-clock me-1"></i> 90 Mins</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="custom-card">
+                <div class="stat-icon mb-3" style="background: #ecfeff; color: #06b6d4;"><i class="bi bi-snow"></i></div>
+                <h4 class="fw-bold mb-2">Air Conditioning Tune-Up</h4>
+                <p class="text-muted small mb-3">Refrigerant gas refill, cabin filter replacement, condenser cleaning, and leak test.</p>
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                    <span class="fw-bold text-primary">₹1,800</span>
+                    <span class="badge bg-light text-dark fw-semibold"><i class="bi bi-clock me-1"></i> 45 Mins</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Why Choose Us Grid -->
+<div class="form-card mb-5">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+            <span class="text-primary fw-semibold text-uppercase tracking-wider small">Why Choose Us</span>
+            <h2 class="fw-bold mt-1 mb-3">Built for Car Owners Who Expect Excellence</h2>
+            <p class="text-muted mb-4">We simplify vehicle maintenance through clear pricing, digital scheduling, and certified quality controls.</p>
+
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="stat-icon" style="width: 44px; height: 44px; font-size: 1.2rem; background: #eff6ff; color: #2563eb;"><i class="bi bi-check-circle-fill"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Instant Online Booking</h6>
+                        <p class="text-muted small mb-0">Select your preferred date, time slot, and service type in under 60 seconds.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3">
+                    <div class="stat-icon" style="width: 44px; height: 44px; font-size: 1.2rem; background: #ecfdf5; color: #10b981;"><i class="bi bi-currency-rupee"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Transparent Upfront Pricing</h6>
+                        <p class="text-muted small mb-0">No hidden labor fees or surprise service add-ons. What you see is what you pay.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3">
+                    <div class="stat-icon" style="width: 44px; height: 44px; font-size: 1.2rem; background: #f5f3ff; color: #8b5cf6;"><i class="bi bi-folder-check"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Complete Digital History</h6>
+                        <p class="text-muted small mb-0">Access past invoices, vehicle records, and upcoming maintenance schedules anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="p-4 rounded-4 bg-light border text-center">
+                <i class="bi bi-tools display-1 text-primary mb-3"></i>
+                <h4 class="fw-bold mb-2">Ready to Upgrade Your Ride?</h4>
+                <p class="text-muted small mb-4">Join thousands of satisfied vehicle owners who trust our service network.</p>
+                <a href="{% url 'book_service' %}" class="btn btn-primary-custom btn-lg w-100">
+                    <i class="bi bi-calendar-event me-2"></i> Book Appointment Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

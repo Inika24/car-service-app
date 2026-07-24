@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile Settings - CarService System{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center py-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="form-card">
+            <!-- User Avatar & Header -->
+            <div class="text-center pb-4 mb-4 border-bottom">
+                <div class="stat-icon mx-auto mb-3" style="width: 72px; height: 72px; font-size: 2.2rem; background: #eff6ff; color: #2563eb;">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <h3 class="fw-bold mb-1">{{ user.first_name|default:user.username }}</h3>
+                <p class="text-muted small mb-2"><i class="bi bi-envelope me-1"></i> {{ user.email|default:"No email provided" }}</p>
+                <span class="badge bg-light text-dark border"><i class="bi bi-shield-check text-success me-1"></i> Customer Account</span>
+            </div>
+
+            <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square me-2 text-primary"></i>Update Profile Details</h5>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger rounded-3 small py-2">
+                        {% for error in form.non_field_errors %}
+                            <div><i class="bi bi-exclamation-circle me-1"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="text-danger small mt-1"><i class="bi bi-x-circle me-1"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary-custom flex-grow-1">
+                        <i class="bi bi-floppy me-1"></i> Save Changes
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary-custom">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
